@@ -67,6 +67,7 @@ jobs:
           git config --global user.name "${{ env.GIT_USERNAME }}"
           git config --global user.email "${{ env.GIT_EMAIL }}"
           git checkout gh-pages
+          git pull
           cp -f ./build/index.yml ./index.yml
           git add ./index.yml
           git commit -m "Update index.yml"

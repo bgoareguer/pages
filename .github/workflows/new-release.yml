@@ -31,7 +31,10 @@ jobs:
           git push origin ${{ github.event.inputs.release_number }}
       - name: Package Helm chart
         run: |
-          tar -cvf chart.tgz -C ./helm/ defectdojo
+          curl -sSL https://get.helm.sh/helm-v3.5.2-linux-amd64.tar.gz | tar xz
+          cp linux-amd64/helm /usr/local/bin/helm
+          mkdir build
+          helm package helm/defectdojo/ --destination ./build
       - name: Create release ${{ github.event.inputs.release_number }}
         id: create_release
         uses: actions/create-release@v1
@@ -54,5 +57,17 @@ jobs:
           asset_path: ./chart.tgz
           asset_name: chart.tgz
           asset_content_type: application/octet-stream
+      - name: Update Helm repository index
+        id: update-helm-repository-index
+        run: |
+          curl -sSL https://get.helm.sh/helm-v3.5.2-linux-amd64.tar.gz | tar xz
+          cp linux-amd64/helm /usr/local/bin/helm
+          apt-get update && apt-get install -y curl
+          cd build 
+          curl -LO "https://technosophos.github.com/tschart/index.yaml"
+          helm repo index ./ --url https://technosophos.github.com/tschart --merge ./index.yaml
+          
+
+
 
 

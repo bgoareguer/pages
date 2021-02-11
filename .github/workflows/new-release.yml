@@ -52,7 +52,7 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./chart.tgz
-          asset_name: chart.tgz.zip
+          asset_name: chart.tgz
           asset_content_type: application/octet-stream
 
 

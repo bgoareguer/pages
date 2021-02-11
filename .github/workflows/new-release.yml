@@ -70,7 +70,7 @@ jobs:
           fi
           git config --global user.name "${{ env.GIT_USERNAME }}"
           git config --global user.email "${{ env.GIT_EMAIL }}"
-          cp -f ./build/index.yml ./index.yml
+          cp -f ../build/index.yml ./index.yml
           git add ./index.yml
           git commit -m "Update index.yml"
           git push -u origin gh-pages

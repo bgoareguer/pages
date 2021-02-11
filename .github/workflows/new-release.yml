@@ -32,7 +32,6 @@ jobs:
       - name: Package Helm chart
         run: |
           mkdir build
-          cd build
           curl -sSL https://get.helm.sh/helm-v3.5.2-linux-amd64.tar.gz | tar xz -C ./build
           ./build/linux-amd64/helm package helm/defectdojo/
       - name: Create release ${{ github.event.inputs.release_number }}

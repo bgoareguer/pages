@@ -31,7 +31,10 @@ jobs:
           git push origin ${{ github.event.inputs.release_number }}
       - name: Package Helm chart
         run: |
-          tar -cvf chart.tgz -C ./helm/ defectdojo
+          mkdir build
+          cd build
+          curl -sSL https://get.helm.sh/helm-v3.5.2-linux-amd64.tar.gz | tar xz -C ./build
+          ./build/linux-amd64/helm package helm/defectdojo/
       - name: Create release ${{ github.event.inputs.release_number }}
         id: create_release
         uses: actions/create-release@v1
@@ -45,7 +48,7 @@ jobs:
           draft: true
           prerelease: false
       - name: Upload Release Asset
-        id: upload-release-asset 
+        id: upload-release-asset
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -54,5 +57,14 @@ jobs:
           asset_path: ./chart.tgz
           asset_name: chart.tgz
           asset_content_type: application/octet-stream
+      - name: Update Helm repository index
+        id: update-helm-repository-index
+        run: |
+          if [ ! -f ./index.yaml ]; then
+            ./build/linux-amd64/helm repo index ./build --url https://bgoareguer.github.io/pages/
+          else
+            ./build/linux-amd64/helm repo index ./build --url https://bgoareguer.github.io/pages/ --merge ./index.yaml
+          fi
+
 
 

@@ -33,7 +33,7 @@ jobs:
         run: |
           mkdir build
           curl -sSL https://get.helm.sh/helm-v3.5.2-linux-amd64.tar.gz | tar xz -C ./build
-          ./build/linux-amd64/helm package helm/defectdojo/
+          ./build/linux-amd64/helm package helm/defectdojo/ --destination ./build
       - name: Create release ${{ github.event.inputs.release_number }}
         id: create_release
         uses: actions/create-release@v1
@@ -53,8 +53,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./chart.tgz
-          asset_name: chart.tgz
+          asset_path: ./build/defectdojo-1.4.3.tgz
+          asset_name: defectdojo-1.4.3.tgz
           asset_content_type: application/octet-stream
       - name: Update Helm repository index
         id: update-helm-repository-index

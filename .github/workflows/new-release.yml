@@ -62,7 +62,7 @@ jobs:
           git config --global user.name "${{ env.GIT_USERNAME }}"
           git config --global user.email "${{ env.GIT_EMAIL }}"
           git remote update
-          git fetch gh-pages
+          git fetch --all
           git checkout gh-pages
           git pull
           if [ ! -f ./index.yml ]; then

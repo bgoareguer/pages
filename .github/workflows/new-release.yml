@@ -65,14 +65,14 @@ jobs:
           git fetch --all
           git checkout gh-pages
           git pull
-          if [ ! -f ./index.yml ]; then
-            ./build/linux-amd64/helm repo index ./build --url https://bgoareguer.github.io/pages/ --destination ./build
+          if [ ! -f ./index.yaml ]; then
+            ./build/linux-amd64/helm repo index ./build --url https://bgoareguer.github.io/pages/
           else
-            ./build/linux-amd64/helm repo index ./build --url https://bgoareguer.github.io/pages/ --merge ./index.yml --destination ./build
+            ./build/linux-amd64/helm repo index ./build --url https://bgoareguer.github.io/pages/ --merge ./index.yaml
           fi
-          cp -f ./build/index.yml ./index.yml
-          git add ./index.yml
-          git commit -m "Update index.yml"
+          cp -f ./build/index.yaml ./index.yaml
+          git add ./index.yaml
+          git commit -m "Update index.yaml"
           git push -u origin gh-pages
 
 

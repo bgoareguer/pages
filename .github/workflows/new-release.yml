@@ -56,21 +56,21 @@ jobs:
           asset_path: ./build/defectdojo-1.4.3.tgz
           asset_name: defectdojo-1.4.3.tgz
           asset_content_type: application/octet-stream
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          ref: gh-pages
       - name: Update Helm repository index
         id: update-helm-repository-index
         run: |
-          if [ ! -f ./index.yml ]; then
-            ../build/linux-amd64/helm repo index ./build --url https://bgoareguer.github.io/pages/
-          else
-            ../build/linux-amd64/helm repo index ./build --url https://bgoareguer.github.io/pages/ --merge ./index.yml
-          fi
           git config --global user.name "${{ env.GIT_USERNAME }}"
           git config --global user.email "${{ env.GIT_EMAIL }}"
-          cp -f ../build/index.yml ./index.yml
+          git remote update
+          git fetch gh-pages
+          git checkout gh-pages
+          git pull
+          if [ ! -f ./index.yml ]; then
+            ./build/linux-amd64/helm repo index ./build --url https://bgoareguer.github.io/pages/
+          else
+            ./build/linux-amd64/helm repo index ./build --url https://bgoareguer.github.io/pages/ --merge ./index.yml
+          fi
+          cp -f ./build/index.yml ./index.yml
           git add ./index.yml
           git commit -m "Update index.yml"
           git push -u origin gh-pages

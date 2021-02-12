@@ -33,8 +33,10 @@ jobs:
         id: package-helm-chart
         run: |
           mkdir build
-          curl -sSL https://get.helm.sh/helm-v3.5.2-linux-amd64.tar.gz | tar xz -C ./build
-          ./build/linux-amd64/helm package helm/defectdojo/ --destination ./build
+          curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+          chmod 700 get_helm.sh
+          ./get_helm.sh
+          helm package helm/defectdojo/ --destination ./build
           echo "::set-output name=chart_version::$(ls build | cut -d '-' -f 2 | sed 's|\.tgz||')"
       - name: Create release ${{ github.event.inputs.release_number }}
         id: create_release
@@ -68,9 +70,9 @@ jobs:
           git checkout gh-pages
           git pull
           if [ ! -f ./index.yaml ]; then
-            ./build/linux-amd64/helm repo index ./build --url "https://github.com/bgoareguer/pages/releases/download/${{ github.event.inputs.release_number }}/"
+            helm repo index ./build --url "https://github.com/bgoareguer/pages/releases/download/${{ github.event.inputs.release_number }}/"
           else
-            ./build/linux-amd64/helm repo index ./build --url "https://github.com/bgoareguer/pages/releases/download/${{ github.event.inputs.release_number }}/" --merge ./index.yaml
+            helm repo index ./build --url "https://github.com/bgoareguer/pages/releases/download/${{ github.event.inputs.release_number }}/" --merge ./index.yaml
           fi
           cp -f ./build/index.yaml ./index.yaml
           git add ./index.yaml

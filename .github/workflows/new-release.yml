@@ -66,9 +66,9 @@ jobs:
           git checkout gh-pages
           git pull
           if [ ! -f ./index.yaml ]; then
-            ./build/linux-amd64/helm repo index ./build --url https://github.com/bgoareguer/pages/releases/download/{{ github.event.inputs.release_number }}/
+            ./build/linux-amd64/helm repo index ./build --url "https://github.com/bgoareguer/pages/releases/download/${{ github.event.inputs.release_number }}/"
           else
-            ./build/linux-amd64/helm repo index ./build --url https://github.com/bgoareguer/pages/releases/download/{{ github.event.inputs.release_number }}/ --merge ./index.yaml
+            ./build/linux-amd64/helm repo index ./build --url "https://github.com/bgoareguer/pages/releases/download/${{ github.event.inputs.release_number }}/" --merge ./index.yaml
           fi
           cp -f ./build/index.yaml ./index.yaml
           git add ./index.yaml

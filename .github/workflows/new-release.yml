@@ -30,10 +30,12 @@ jobs:
           git tag -a ${{ github.event.inputs.release_number }} -m "[bot] release ${{ github.event.inputs.release_number }}"
           git push origin ${{ github.event.inputs.release_number }}
       - name: Package Helm chart
+        id: package-helm-chart
         run: |
           mkdir build
           curl -sSL https://get.helm.sh/helm-v3.5.2-linux-amd64.tar.gz | tar xz -C ./build
           ./build/linux-amd64/helm package helm/defectdojo/ --destination ./build
+          echo "::set-output name=chart_version::1.4.3"
       - name: Create release ${{ github.event.inputs.release_number }}
         id: create_release
         uses: actions/create-release@v1
@@ -53,8 +55,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build/defectdojo-1.4.3.tgz
-          asset_name: defectdojo-1.4.3.tgz
+          asset_path: ./build/defectdojo-${{ steps.package-helm-chart.outputs.chart_version }}.tgz
+          asset_name: defectdojo-${{ steps.package-helm-chart.outputs.chart_version }}.tgz
           asset_content_type: application/octet-stream
       - name: Update Helm repository index
         id: update-helm-repository-index

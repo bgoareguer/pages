@@ -35,7 +35,7 @@ jobs:
           mkdir build
           curl -sSL https://get.helm.sh/helm-v3.5.2-linux-amd64.tar.gz | tar xz -C ./build
           ./build/linux-amd64/helm package helm/defectdojo/ --destination ./build
-          echo "::set-output name=chart_version::1.4.3"
+          echo "::set-output name=chart_version::$(ls build | cut -d '-' -f 2 | sed 's|\.tgz||')"
       - name: Create release ${{ github.event.inputs.release_number }}
         id: create_release
         uses: actions/create-release@v1

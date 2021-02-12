@@ -29,13 +29,15 @@ jobs:
         run: |
           git tag -a ${{ github.event.inputs.release_number }} -m "[bot] release ${{ github.event.inputs.release_number }}"
           git push origin ${{ github.event.inputs.release_number }}
+      - name: Install Helm
+        run: |
+          curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+          chmod 700 get_helm.sh
+          ./get_helm.sh
       - name: Package Helm chart
         id: package-helm-chart
         run: |
           mkdir build
-          curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
-          chmod 700 get_helm.sh
-          ./get_helm.sh
           helm package helm/defectdojo/ --destination ./build
           echo "::set-output name=chart_version::$(ls build | cut -d '-' -f 2 | sed 's|\.tgz||')"
       - name: Create release ${{ github.event.inputs.release_number }}

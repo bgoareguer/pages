@@ -1,0 +1,31 @@
+apiVersion: v1
+entries:
+  defectdojo:
+  - apiVersion: v1
+    appVersion: 1.11.1
+    created: "2021-02-12T08:14:58.745403289Z"
+    dependencies:
+    - condition: mysql.enabled
+      name: mysql
+      repository: '@stable'
+      version: 1.6.9
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: '@bitnami'
+      version: 9.8.11
+    - condition: rabbitmq.enabled
+      name: rabbitmq
+      repository: '@bitnami'
+      version: 8.0.2
+    - condition: redis.enabled
+      name: redis
+      repository: '@bitnami'
+      version: 12.0.0
+    description: A Helm chart for Kubernetes to install DefectDojo
+    digest: 64853153485f3153ad8bf975b7eebed645a98ea88ccfbce509710240f00d50df
+    icon: https://www.defectdojo.org/img/favicon.ico
+    name: defectdojo
+    urls:
+    - https://bgoareguer.github.io/pages/defectdojo-1.4.3.tgz
+    version: 1.4.3
+generated: "2021-02-12T08:14:58.728993471Z"
